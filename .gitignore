@@ -1,0 +1,6 @@
+# IDE directories
+.vscode/
+.idea/
+
+# Output from build
+*.wasm

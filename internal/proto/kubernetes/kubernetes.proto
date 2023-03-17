@@ -1,0 +1,29 @@
+syntax = "proto3";
+package kubernetes;
+
+option go_package = "github.com/dmvolod/wasm-k8s-host-proxy/internal/proto/kubernetes";
+
+// go:plugin type=host module=kubernetes
+service Proxy {
+  rpc Get(GetRequest) returns (GetReply) {}
+}
+
+message GVR {
+  string group = 1;
+  string version = 2;
+  string resource = 3;
+}
+
+message Namespaced {
+  string name = 1;
+  string namespace = 2;
+}
+
+message GetRequest {
+  GVR gvr = 1;
+  Namespaced name = 2;
+}
+
+message GetReply {
+  bytes payload = 1;
+}
