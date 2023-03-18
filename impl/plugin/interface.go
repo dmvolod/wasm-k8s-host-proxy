@@ -1,9 +1,9 @@
 // Kubernetes client-go interface and functions ported for TinyGo
-// Copyright 2015 The Kubernetes Authors.
+// Copyright 2016 The Kubernetes Authors.
 
 //go:build tinygo.wasm
 
-package plugin
+package kubernetes
 
 import (
 	"context"

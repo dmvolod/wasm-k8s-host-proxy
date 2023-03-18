@@ -4,7 +4,8 @@ go 1.18
 
 require (
 	github.com/knqyf263/go-plugin v0.6.1
-	github.com/mailru/easyjson v0.7.6
+	github.com/kubewarden/k8s-objects v1.24.0-kw4
+	github.com/mailru/easyjson v0.7.7
 	github.com/tetratelabs/wazero v1.0.0-rc.2
 	google.golang.org/protobuf v1.29.0
 	k8s.io/apimachinery v0.24.11
@@ -14,6 +15,7 @@ require (
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/go-logr/logr v1.2.3 // indirect
+	github.com/go-openapi/strfmt v0.21.3 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/gofuzz v1.1.0 // indirect
@@ -38,3 +40,5 @@ require (
 	sigs.k8s.io/structured-merge-diff/v4 v4.2.3 // indirect
 	sigs.k8s.io/yaml v1.3.0 // indirect
 )
+
+replace github.com/go-openapi/strfmt => github.com/kubewarden/strfmt v0.1.2

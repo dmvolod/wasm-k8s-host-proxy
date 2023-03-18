@@ -1,9 +1,14 @@
+//go:build !tinygo.wasm
+
 package host
 
 import (
 	"context"
 	"encoding/json"
+	"os"
+	"path"
 
+	"github.com/tetratelabs/wazero"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/client-go/dynamic"
@@ -19,11 +24,24 @@ type kubernetesProxy struct {
 	dynamicClient dynamic.Interface
 }
 
+func Init(ctx context.Context, runtime wazero.Runtime) error {
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return err
+	}
+	kubernetesProxy, err := NewKubernetesProxy(path.Join(home, ".kube", "config"))
+	if err != nil {
+		return err
+	}
+	return kubernetes.Instantiate(ctx, runtime, kubernetesProxy)
+}
+
 func NewKubernetesProxy(kubeConfig string) (*kubernetesProxy, error) {
 	restConfig, err := restConfig(kubeConfig)
 	if err != nil {
 		return nil, err
 	}
+
 	dynamicClient, err := dynamic.NewForConfig(restConfig)
 	if err != nil {
 		return nil, err

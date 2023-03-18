@@ -1,0 +1,35 @@
+syntax = "proto3";
+package getter;
+
+import "google/protobuf/empty.proto";
+
+option go_package = "github.com/dmvolod/wasm-k8s-host-proxy/examples/simple-get/getter";
+
+// The getter service definition.
+// go:plugin type=plugin version=1
+service Getter {
+  // Sends a greeting
+  rpc GetConfigMap(GetRequest) returns (GetReply) {}
+}
+
+// The request message containing the ConfigMap name and namespace.
+message GetRequest {
+  string name = 1;
+  string namespace = 2;
+}
+
+// The response message containing the ConfigMap data field value.
+message GetReply {
+  string data = 1;
+}
+
+// The host functions embedded into the plugin
+// go:plugin type=host
+service HostFunctions {
+  // Shows a log message
+  rpc Log(LogRequest) returns (google.protobuf.Empty) {}
+}
+
+message LogRequest {
+  string message = 1;
+}
