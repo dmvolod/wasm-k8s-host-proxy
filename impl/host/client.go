@@ -26,6 +26,14 @@ type kubernetesProxy struct {
 
 type KubeConfig func() (dynamic.Interface, error)
 
+func Instantiate(ctx context.Context, runtime wazero.Runtime, config KubeConfig) error {
+	kubernetesClient, err := config()
+	if err != nil {
+		return err
+	}
+	return kubernetes.Instantiate(ctx, runtime, kubernetesProxy{kubernetesClient})
+}
+
 func WithDefaultKubeConfig() KubeConfig {
 	home, err := os.UserHomeDir()
 	if err != nil {
@@ -45,28 +53,17 @@ func WithKubeConfig(kubeConfig string) KubeConfig {
 		}
 	}
 
-	dynamicClient, err := dynamic.NewForConfig(restConfig)
-	if err != nil {
-		return func() (dynamic.Interface, error) {
-			return nil, err
-		}
-	}
-
 	return func() (dynamic.Interface, error) {
-		return dynamicClient, nil
+		return dynamic.NewForConfig(restConfig)
 	}
 }
 
-func Instantiate(ctx context.Context, runtime wazero.Runtime, config KubeConfig) error {
-	kubernetesClient, err := config()
-	if err != nil {
-		return err
-	}
-	return kubernetes.Instantiate(ctx, runtime, kubernetesProxy{kubernetesClient})
+func WithInClusterConfig() KubeConfig {
+	return WithKubeConfig("")
 }
 
 func restConfig(kubeConfig string) (*rest.Config, error) {
-	if kubeConfig != "" {
+	if len(kubeConfig) == 0 {
 		return clientcmd.BuildConfigFromFlags("", kubeConfig)
 	}
 

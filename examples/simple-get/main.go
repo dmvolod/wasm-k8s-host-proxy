@@ -6,17 +6,15 @@ import (
 	"log"
 
 	"github.com/knqyf263/go-plugin/types/known/emptypb"
+	"github.com/onmetal/controller-utils/unstructuredutils"
 	"github.com/tetratelabs/wazero"
-	corev1 "k8s.io/api/core/v1"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime"
-	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/client-go/dynamic"
 	"k8s.io/client-go/dynamic/fake"
 
 	"github.com/dmvolod/wasm-k8s-host-proxy/examples/simple-get/getter"
 	"github.com/dmvolod/wasm-k8s-host-proxy/impl/host"
+	"github.com/dmvolod/wasm-k8s-host-proxy/internal/unstructuredutil"
 )
 
 func main() {
@@ -28,36 +26,9 @@ func main() {
 func run() error {
 	ctx := context.Background()
 
-	// Instantiate Fake Kubernetes client for demo
-	fakeClient := fake.NewSimpleDynamicClient(runtime.NewScheme())
-	cm := &corev1.ConfigMap{
-		TypeMeta: metav1.TypeMeta{
-			Kind:       "ConfigMap",
-			APIVersion: "v1",
-		},
-		ObjectMeta: metav1.ObjectMeta{
-			Name:      "demo",
-			Namespace: "default",
-		},
-		Data: map[string]string{
-			"my-data": "This is test data",
-		},
-	}
-
-	cmunstr, err := runtime.DefaultUnstructuredConverter.ToUnstructured(cm)
-	if err != nil {
-		return err
-	}
-
-	_, err = fakeClient.Resource(schema.GroupVersionResource{
-		Version:  "v1",
-		Resource: "configmaps",
-	}).Namespace(cm.Namespace).Create(ctx, &unstructured.Unstructured{
-		Object: cmunstr,
-	}, metav1.CreateOptions{})
-	if err != nil {
-		return err
-	}
+	// Instantiate Fake Kubernetes client and load test data.
+	objs, err := unstructuredutils.ReadFile("testdata/configmap.yaml")
+	fakeClient := fake.NewSimpleDynamicClient(runtime.NewScheme(), unstructuredutil.UnstructuredSliceToObjectSlice(objs)...)
 
 	p, err := getter.NewGetterPlugin(ctx, getter.WazeroRuntime(func(ctx context.Context) (wazero.Runtime, error) {
 		r, err := getter.DefaultWazeroRuntime()(ctx)
@@ -65,6 +36,7 @@ func run() error {
 			return nil, err
 		}
 
+		// Register host functions from the Kubernetes library
 		return r, host.Instantiate(ctx, r, func() (dynamic.Interface, error) {
 			return fakeClient, nil
 		})
@@ -73,7 +45,7 @@ func run() error {
 		return err
 	}
 
-	// Pass my host functions that are embedded into the plugin.
+	// Pass the host functions that are embedded into the plugin.
 	getterPlugin, err := p.Load(ctx, "plugin/plugin.wasm", getterHostFunctions{})
 	if err != nil {
 		return err

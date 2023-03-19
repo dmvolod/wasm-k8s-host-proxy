@@ -40,6 +40,6 @@ func (g GetterPlugin) GetConfigMap(ctx context.Context, request *getter.GetReque
 	}
 
 	return &getter.GetReply{
-		Data: cm.Kind,
+		Data: cm.Data["my-data"],
 	}, nil
 }
