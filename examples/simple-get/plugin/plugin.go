@@ -4,6 +4,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 
 	corev1 "github.com/kubewarden/k8s-objects/api/core/v1"
 
@@ -24,7 +25,7 @@ func (g GetterPlugin) GetConfigMap(ctx context.Context, request *getter.GetReque
 	hostFunctions := getter.NewHostFunctions()
 	kubeClientProxy := kubernetes.NewProxyClient()
 	hostFunctions.Log(ctx, &getter.LogRequest{
-		Message: "Getting ConfigMap data from the Kubernetes instance...",
+		Message: fmt.Sprintf("Getting ConfigMap object '%s/%s' from the Kubernetes cluster...", request.Name, request.Namespace),
 	})
 
 	cm := &corev1.ConfigMap{}
@@ -33,7 +34,7 @@ func (g GetterPlugin) GetConfigMap(ctx context.Context, request *getter.GetReque
 		Resource: "configmaps",
 	}
 
-	err := kubeClientProxy.Resource(cmGVR).Namespace("default").Get(ctx, "demo", kubernetes.GetOptions{}, cm)
+	err := kubeClientProxy.Resource(cmGVR).Namespace(request.Namespace).Get(ctx, request.Name, kubernetes.GetOptions{}, cm)
 	if err != nil {
 		return nil, err
 	}

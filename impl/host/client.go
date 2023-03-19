@@ -15,7 +15,7 @@ import (
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 
-	"github.com/dmvolod/wasm-k8s-host-proxy/internal/proto/kubernetes"
+	"github.com/dmvolod/wasm-k8s-host-proxy/internal/host/kubernetes"
 )
 
 var _ kubernetes.Proxy = (*kubernetesProxy)(nil)
