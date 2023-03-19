@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go-plugin v0.7.0-dev
 // 	protoc               v3.21.12
-// source: internal/proto/kubernetes/kubernetes.proto
+// source: internal/host/kubernetes/kubernetes.proto
 
 package kubernetes
 

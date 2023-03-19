@@ -7,7 +7,7 @@ import (
 
 	"github.com/mailru/easyjson"
 
-	"github.com/dmvolod/wasm-k8s-host-proxy/internal/proto/kubernetes"
+	"github.com/dmvolod/wasm-k8s-host-proxy/internal/host/kubernetes"
 )
 
 var proxy = kubernetes.NewProxy()

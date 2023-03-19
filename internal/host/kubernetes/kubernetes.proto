@@ -1,7 +1,7 @@
 syntax = "proto3";
 package kubernetes;
 
-option go_package = "github.com/dmvolod/wasm-k8s-host-proxy/internal/proto/kubernetes";
+option go_package = "github.com/dmvolod/wasm-k8s-host-proxy/internal/host/kubernetes";
 
 // go:plugin type=host module=kubernetes
 service Proxy {
