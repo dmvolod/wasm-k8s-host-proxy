@@ -24,21 +24,20 @@ type kubernetesProxy struct {
 	dynamicClient dynamic.Interface
 }
 
-type ConfigOption func() (dynamic.Interface, error)
+type KubeConfig func() (dynamic.Interface, error)
 
-func WithDefaultKubeConfig() ConfigOption {
+func WithDefaultKubeConfig() KubeConfig {
 	home, err := os.UserHomeDir()
 	if err != nil {
 		return func() (dynamic.Interface, error) {
 			return nil, err
 		}
-
 	}
 
 	return WithKubeConfig(path.Join(home, ".kube", "config"))
 }
 
-func WithKubeConfig(kubeConfig string) ConfigOption {
+func WithKubeConfig(kubeConfig string) KubeConfig {
 	restConfig, err := restConfig(kubeConfig)
 	if err != nil {
 		return func() (dynamic.Interface, error) {
@@ -58,8 +57,8 @@ func WithKubeConfig(kubeConfig string) ConfigOption {
 	}
 }
 
-func Instantiate(ctx context.Context, runtime wazero.Runtime, option ConfigOption) error {
-	kubernetesClient, err := option()
+func Instantiate(ctx context.Context, runtime wazero.Runtime, config KubeConfig) error {
+	kubernetesClient, err := config()
 	if err != nil {
 		return err
 	}
