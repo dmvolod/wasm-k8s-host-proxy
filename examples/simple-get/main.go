@@ -36,7 +36,7 @@ func run() error {
 			return nil, err
 		}
 
-		// Register host functions from the Kubernetes library
+		// Register host functions from the Kubernetes client proxy library.
 		return r, host.Instantiate(ctx, r, func() (dynamic.Interface, error) {
 			return fakeClient, nil
 		})

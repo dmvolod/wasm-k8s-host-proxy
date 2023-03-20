@@ -29,14 +29,6 @@ func toGVR(gvr GroupVersionResource) *kubernetes.GVR {
 	}
 }
 
-func FromGVR(gvr kubernetes.GVR) GroupVersionResource {
-	return GroupVersionResource{
-		Group:    gvr.Group,
-		Version:  gvr.Version,
-		Resource: gvr.Resource,
-	}
-}
-
 func (p *proxyClient) Namespace(namespace string) ResourceInterface {
 	ret := *p
 	ret.namespace = namespace
