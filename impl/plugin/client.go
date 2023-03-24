@@ -4,7 +4,9 @@ package kubernetes
 
 import (
 	"context"
+	"strings"
 
+	"github.com/kubewarden/k8s-objects/apimachinery/pkg/runtime/schema"
 	"github.com/mailru/easyjson"
 
 	"github.com/dmvolod/wasm-k8s-host-proxy/internal/host/kubernetes"
@@ -14,18 +16,17 @@ var proxy = kubernetes.NewProxy()
 
 type proxyClient struct {
 	namespace string
-	resource  GroupVersionResource
 }
 
-func NewProxyClient() Interface {
+func NewProxyClient() NamespaceableResourceInterface {
 	return &proxyClient{}
 }
 
-func toGVR(gvr GroupVersionResource) *kubernetes.GVR {
+func toGVK(gvr schema.GroupVersionKind) *kubernetes.GVR {
 	return &kubernetes.GVR{
 		Group:    gvr.Group,
 		Version:  gvr.Version,
-		Resource: gvr.Resource,
+		Resource: strings.ToLower(gvr.Kind) + "s",
 	}
 }
 
@@ -35,15 +36,9 @@ func (p *proxyClient) Namespace(namespace string) ResourceInterface {
 	return &ret
 }
 
-func (p *proxyClient) Resource(resource GroupVersionResource) NamespaceableResourceInterface {
-	return &proxyClient{
-		resource: resource,
-	}
-}
-
-func (p *proxyClient) Get(ctx context.Context, name string, options GetOptions, object easyjson.Unmarshaler, subresources ...string) error {
+func (p *proxyClient) Get(ctx context.Context, name string, options GetOptions, object Object, subresources ...string) error {
 	reply, err := proxy.Get(ctx, &kubernetes.GetRequest{
-		Gvr: toGVR(p.resource),
+		Gvr: toGVK(object.GroupVersionKind()),
 		Name: &kubernetes.Namespaced{
 			Name:      name,
 			Namespace: p.namespace,

@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/knqyf263/go-plugin v0.6.1
-	github.com/kubewarden/k8s-objects v1.24.0-kw4
+	github.com/kubewarden/k8s-objects v1.24.0-kw7
 	github.com/mailru/easyjson v0.7.7
 	github.com/onmetal/controller-utils v0.6.5
 	github.com/stretchr/testify v1.8.1
@@ -67,3 +67,5 @@ require (
 )
 
 replace github.com/go-openapi/strfmt => github.com/kubewarden/strfmt v0.1.2
+
+replace github.com/kubewarden/k8s-objects => github.com/dmvolod/k8s-objects v1.24.0-kw7

@@ -36,19 +36,15 @@ p, err := getter.NewGetterPlugin(ctx, getter.WazeroRuntime(func(ctx context.Cont
 ## Using the Kubernetes client API in the WebAssembly plugin
 
 It's very easy to use Kubernetes client proxy API, the same as standard `client-go` dynamic client API.
-The only difference is that instead of standard `k8s.io/api` objects binding, generated objects
-from the [Kubewarden](https://github.com/kubewarden) project are used, i.e. [k8s-objects](https://github.com/kubewarden/k8s-objects).
+The only difference is that instead of standard `k8s.io/api` objects binding, generated
+[k8s-objects](https://github.com/kubewarden/k8s-objects) from the [Kubewarden](https://github.com/kubewarden) project are used. 
 
 ```go
 import corev1 "github.com/kubewarden/k8s-objects/api/core/v1"
 ...
 cm := &corev1.ConfigMap{}
-cmGVR := kubernetes.GroupVersionResource{
-	Version:  "v1",
-	Resource: "configmaps",
-}
 
-err := kubeClientProxy.Resource(cmGVR).Namespace("default").Get(ctx, "demo", kubernetes.GetOptions{}, cm)
+err := kubeClientProxy.Namespace("default").Get(ctx, "demo", kubernetes.GetOptions{}, cm)
 if err != nil {
 	return nil, err
 }
