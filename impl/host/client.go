@@ -64,10 +64,10 @@ func WithInClusterConfig() KubeConfig {
 
 func restConfig(kubeConfig string) (*rest.Config, error) {
 	if len(kubeConfig) == 0 {
-		return clientcmd.BuildConfigFromFlags("", kubeConfig)
+		return rest.InClusterConfig()
 	}
 
-	return rest.InClusterConfig()
+	return clientcmd.BuildConfigFromFlags("", kubeConfig)
 }
 
 func (p kubernetesProxy) Get(ctx context.Context, request *kubernetes.GetRequest) (*kubernetes.GetReply, error) {
