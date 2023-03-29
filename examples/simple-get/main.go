@@ -1,3 +1,5 @@
+//go:generate tinygo build -o plugin/plugin.wasm -scheduler=none -target=wasi --no-debug plugin/plugin.go
+
 package main
 
 import (
