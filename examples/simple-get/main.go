@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/knqyf263/go-plugin/types/known/emptypb"
 	"github.com/onmetal/controller-utils/unstructuredutils"
@@ -32,6 +33,7 @@ func run() error {
 	objs, err := unstructuredutils.ReadFile("testdata/configmap.yaml")
 	fakeClient := fake.NewSimpleDynamicClient(runtime.NewScheme(), unstructuredutil.UnstructuredSliceToObjectSlice(objs)...)
 
+	mc := wazero.NewModuleConfig().WithStdout(os.Stdout)
 	p, err := getter.NewGetterPlugin(ctx, getter.WazeroRuntime(func(ctx context.Context) (wazero.Runtime, error) {
 		r, err := getter.DefaultWazeroRuntime()(ctx)
 		if err != nil {
@@ -42,7 +44,7 @@ func run() error {
 		return r, host.Instantiate(ctx, r, func() (dynamic.Interface, error) {
 			return fakeClient, nil
 		})
-	}))
+	}), getter.WazeroModuleConfig(mc))
 	if err != nil {
 		return err
 	}

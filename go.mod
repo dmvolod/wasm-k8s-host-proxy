@@ -3,12 +3,14 @@ module github.com/dmvolod/wasm-k8s-host-proxy
 go 1.18
 
 require (
-	github.com/knqyf263/go-plugin v0.6.1
-	github.com/kubewarden/k8s-objects v1.24.0-kw4
+	github.com/dmvolod/mageutil v1.1.0
+	github.com/knqyf263/go-plugin v0.7.0
+	github.com/kubewarden/k8s-objects v1.24.0-kw7
+	github.com/magefile/mage v1.14.0
 	github.com/mailru/easyjson v0.7.7
 	github.com/onmetal/controller-utils v0.6.5
 	github.com/stretchr/testify v1.8.1
-	github.com/tetratelabs/wazero v1.0.0-rc.2
+	github.com/tetratelabs/wazero v1.0.1
 	google.golang.org/protobuf v1.29.0
 	k8s.io/apimachinery v0.24.3
 	k8s.io/client-go v0.24.3
@@ -20,7 +22,6 @@ require (
 	github.com/VividCortex/ewma v1.1.1 // indirect
 	github.com/cheggaaa/pb/v3 v3.0.4 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/dmvolod/mageutil v1.1.0 // indirect
 	github.com/emicklei/go-restful v2.9.5+incompatible // indirect
 	github.com/evanphx/json-patch v4.12.0+incompatible // indirect
 	github.com/fatih/color v1.9.0 // indirect
@@ -36,7 +37,6 @@ require (
 	github.com/imdario/mergo v0.3.12 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
-	github.com/magefile/mage v1.14.0 // indirect
 	github.com/mattn/go-colorable v0.1.4 // indirect
 	github.com/mattn/go-isatty v0.0.12 // indirect
 	github.com/mattn/go-runewidth v0.0.7 // indirect

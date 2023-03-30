@@ -29,12 +29,7 @@ func (g GetterPlugin) GetConfigMap(ctx context.Context, request *getter.GetReque
 	})
 
 	cm := &corev1.ConfigMap{}
-	cmGVR := kubernetes.GroupVersionResource{
-		Version:  "v1",
-		Resource: "configmaps",
-	}
-
-	err := kubeClientProxy.Resource(cmGVR).Namespace(request.Namespace).Get(ctx, request.Name, kubernetes.GetOptions{}, cm)
+	err := kubeClientProxy.Namespace(request.Namespace).Get(ctx, request.Name, kubernetes.GetOptions{}, cm)
 	if err != nil {
 		return nil, err
 	}

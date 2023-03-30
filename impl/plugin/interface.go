@@ -8,13 +8,13 @@ package kubernetes
 import (
 	"context"
 
+	"github.com/kubewarden/k8s-objects/apimachinery/pkg/runtime/schema"
 	"github.com/mailru/easyjson"
 )
 
-type GroupVersionResource struct {
-	Group    string
-	Version  string
-	Resource string
+type Object interface {
+	schema.ObjectKind
+	easyjson.Unmarshaler
 }
 
 type TypeMeta struct {
@@ -51,10 +51,6 @@ type NamespaceableResourceInterface interface {
 	ResourceInterface
 }
 
-type Interface interface {
-	Resource(resource GroupVersionResource) NamespaceableResourceInterface
-}
-
 type ResourceInterface interface {
-	Get(ctx context.Context, name string, options GetOptions, object easyjson.Unmarshaler, subresources ...string) error
+	Get(ctx context.Context, name string, options GetOptions, object Object, subresources ...string) error
 }
