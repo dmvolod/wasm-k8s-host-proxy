@@ -12,7 +12,7 @@ $ protoc --go-plugin_out=. --go-plugin_opt=paths=source_relative getter/getter.p
 Use TinyGo to compile the plugin to Wasm.
 
 ```shell
-$ tinygo build -o plugin/plugin.wasm -scheduler=none -target=wasi --no-debug plugin/plugin.go
+$ go generate ./...
 ```
 
 ## Run

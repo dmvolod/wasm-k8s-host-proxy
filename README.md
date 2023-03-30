@@ -56,8 +56,8 @@ Seem more details in the [examples](./examples/simple-get/README.md)
 
 ## Library Development
 
-> **_Note:_** Since the `go-plugin` doesn't support these functions yet, it's necessary to regenerate the stubs using the 
-> generator built from the source codes of the pull request [35](https://github.com/knqyf263/go-plugin/pull/35).
+> **_Note:_** To regenerate code stubs and examples, at least [v0.7.0](https://github.com/knqyf263/go-plugin/releases/tag/v0.7.0)
+> `go-plugin` version is required.
 
 Generating Kubernetes proxy library stubs
 
