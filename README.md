@@ -40,11 +40,15 @@ The only difference is that instead of standard `k8s.io/api` objects binding, ge
 [k8s-objects](https://github.com/kubewarden/k8s-objects) from the [Kubewarden](https://github.com/kubewarden) project are used. 
 
 ```go
-import corev1 "github.com/kubewarden/k8s-objects/api/core/v1"
+import (
+	corev1 "github.com/kubewarden/k8s-objects/api/core/v1"
+	"github.com/dmvolod/wasm-k8s-host-proxy/impl/plugin/client"
+)
 ...
 cm := &corev1.ConfigMap{}
 
-err := kubeClientProxy.Namespace("default").Get(ctx, "demo", kubernetes.GetOptions{}, cm)
+kubeClientProxy := client.NewProxyClient()
+err := kubeClientProxy.Namespace("default").Get(ctx, "demo", client.GetOptions{}, cm)
 if err != nil {
 	return nil, err
 }

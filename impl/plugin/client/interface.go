@@ -3,7 +3,7 @@
 
 //go:build tinygo.wasm
 
-package kubernetes
+package client
 
 import (
 	"context"
