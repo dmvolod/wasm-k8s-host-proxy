@@ -15,7 +15,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
       - name: Lint
-        uses: dmvolod/mage-action@v2.3.1
+        uses: magefile/mage-action@master
         with:
           version: latest
           args: lint
@@ -25,12 +25,12 @@ jobs:
           tinygo-version: 0.27.0
           install-binaryen: false
       - name: Generate WASM files
-        uses: dmvolod/mage-action@v2.3.1
+        uses: magefile/mage-action@master
         with:
           version: latest
           args: generate
       - name: Test
-        uses: dmvolod/mage-action@v2.3.1
+        uses: magefile/mage-action@master
         with:
           version: latest
           args: test
